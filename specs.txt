@@ -1,0 +1,17 @@
+// ok we need a table, with in it the following entries:
+- name of the player
+- team he plays in
+- position he plays( offense, middle, defence, goalie(or including him in defence, not sure yet)
+- the five last grades he got (the site doesn't go further back, but we will increment as the competition goes on)
+- optional (at least for now): number of goals, "worth" of the player, and maybe the players that start generally on the bench
+
+from there, make the teams "fight" according to the calendar:
+- compare the grades of attack vs def, and middle vs middle; that gives us 3 grades: A/D, M/M, and D/A
+- if one team wins on two comparisons at least, she wins, else it's a tie
+
+options (tied to those of the table):
+- add coefficients to be determined that impact the grades: 
+  * goals (although the grade takes it already into account but I'm not sure it's impactful enough, we'll have to run some tests)
+  * taking replacements into consideration (grade of the replacement could be taken into account but with a coefficient since they doesn't play all game long)
+  
+ obviously, out of it are the results of the games.
