@@ -23,19 +23,25 @@
   * identified by name
   * one dude per row
   * character # indicates comment
-  * blank lines are ignored
+  * position of a dude depends on the position on the file. Position blocks must be separated by blank lines.
   * blank within a line are ignored
 
 ```
 teams/
-  blues
-  red
-  green
+  blue.txt
+  red.txt
+  green.txt
 ```
 
 ```
-johny
-manuel
+# This line is a comment. It shows the global position of dudes within the blue team.
+# Attack - first block
+Johny
+Manuel
+# Middle - second block
+Keyran
+# Defense - third block
+Van
 ```
 
 * one directory for the dudes
@@ -53,7 +59,7 @@ dudes/
 ```
 
 ```
-# this line is a comment
+# this line is a comment. It show the history of matches for Johny.
 A V # A for attack, V for victory
 M D # M for middle, D for defeat
 D T # D for defense, T for tie
@@ -65,9 +71,10 @@ D T # D for defense, T for tie
   * the configuration is invalid
   * a team or a dude cannot be reached
   * any processing fails
+  * more than 3 blocks or less than 1 block is defined within each team
 
 * process position's grade A, M and D for each dude: 
   * to calculate the grade of a dude on a given position, take it's historic. A victory at the position earns 3 points, a tie earns 2, a defeat earns 1.
   * oppose the sum of grades A of team 1 (A1) to grades D of team 2 (D2). Same with A2 vs D1, and M1 vs M2
-  * winning a contest earns 1 point, a tie earns none, a defeat costs 1 point. The team with the most points wins the match.
-  * After the match is played, the software registers the score on each player's history.
+  * In order to win, a team must collect two position vicory, or one and no defeat. (VTT, VVT, VVD) If a team wins, the other looses. Otherwise, it's a tie.
+  * After the match is played, the software registers the score on each player's history. The V/T/D of a dude depends on the match's result, not his personnal score.
