@@ -25,7 +25,7 @@
   * character # indicates comment
   * position of a dude depends on the position on the file. Position blocks must be separated by blank lines.
   * blank within a line are ignored
-
+  * it might be important to take into consideration the general team config: for example (PSG systematically uses a 4-3-3). Of course configurations exceeding 3 lines would be merged in a 3-line config (eg a 4-2-3-1 would be merged in 4-5-1). That implies that lines can contain from 1 to 5 players, which could also be taken into account (1 attacker should be in trouble facing 5 defenders)
 ```
 teams/
   blue.txt
