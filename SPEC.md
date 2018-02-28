@@ -25,7 +25,6 @@
   * character # indicates comment
   * position of a dude depends on the position on the file. Position blocks must be separated by blank lines.
   * blank within a line are ignored
-
 ```
 teams/
   blue.txt
