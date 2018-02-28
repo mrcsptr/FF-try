@@ -95,3 +95,40 @@ The software parses the content of the configuration located the c flag.
 The software crashes if the config is invalid.
 If the file does not exist, the software crashes with a pretty error logged.
 The exact output can be different from the input, but the values are the same: space or line feed will be ignored, all attributes will be CamelCased, etc...
+
+## 4. Define the Dude domain type
+
+A dude is defined by a name, and a list of previous fights.
+Declare a dude type at the domain (project's root) level, with the proper attributes.
+The dude type must implement three methods that calculate its grade regarding his history.
+To share the maximum amount of code, those three *exported* methods should rely on a unique *non exported method*.
+You will need to declare a dude result type, or embed it in the dude type.
+Since the results are splitted into 3 distinct types (A, M, D), think on the best primitive to store them.
+
+Once the dude type is declared, you need to instanciate dudes with their files. The configuration gives the location
+of the dude directory. Each dude from this directory must be loaded and stored in memory. Taking the content of a file
+to instanciate a new dude is called `parsing`. Parse all files within the dude folder to instanciate the dudes.
+This parsing must be declared outside of the domain (project's root). create a `$PROJECT/data/filesystem` directory, and
+implement the dude parsing in the `dude.go` file. Because the number of dudes and the size of their history is limitless,
+use an `io.Reader` instead of `ioutil.ReadFile`.
+
+```go
+func AllDudes(location string) ([]riley.Dude, error) {
+  // ... load dudes.
+}
+
+// String implements the fmt.Stringer interface. It displays the name of the dude, it's current grades, and the number of fights he did.
+func (d Dude) String() string{
+}
+```
+
+Finaly, print all dudes on the terminal after loading them in memory.
+
+_Note: because you have internal dependancies, you need to use the riley package within your source code. The riley package is the name of the `domain` package. Because the principal repository is `moxar/riley`, you need to rename it this way *on your computer*. Otherwise, the imports won't work._
+
+### Libs
+- fmt
+- strings
+- io
+- os
+- moxar/riley
