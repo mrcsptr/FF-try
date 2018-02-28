@@ -16,8 +16,8 @@ func main() {
 
 	b, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln("unable to load configuration:", err)
 	}
 
-	fmt.Printf("%s", b)
+	fmt.Println(string(b))
 }
