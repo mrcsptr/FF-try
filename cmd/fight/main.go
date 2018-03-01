@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 )
 
@@ -14,10 +13,10 @@ func main() {
 
 	flag.Parse()
 
-	b, err := ioutil.ReadFile(configPath)
+	config, err := NewConfig(configPath)
 	if err != nil {
 		log.Fatalln("unable to load configuration:", err)
 	}
 
-	fmt.Println(string(b))
+	fmt.Println(config)
 }

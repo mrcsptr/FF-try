@@ -1,1 +1,4 @@
-hello, world
+{
+    "SomeNumber": 4,
+    "SomeString": "bin/config.json"
+}
