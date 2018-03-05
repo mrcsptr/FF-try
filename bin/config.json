@@ -1,4 +1,6 @@
 {
-    "SomeNumber": 4,
-    "SomeString": "bin/config.json"
+    "TeamsLocation": "quelque part",
+    "DudesLocation": "autre part",
+    "ATeam": "Team A",
+    "BTeam": "Team B"
 }
