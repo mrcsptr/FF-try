@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 )
 
-// creation of config type
+// Config is a type hosting the data coming from config.json
 type Config struct {
 	TeamsLocation string
 	DudesLocation string
@@ -14,7 +14,7 @@ type Config struct {
 	BTeam         string
 }
 
-// implementation function NewConfig to get the informations
+// NewConfig gets the information from config.json to get the data to fight
 func NewConfig(filepath string) (Config, error) {
 	raw, err := ioutil.ReadFile(filepath)
 	if err != nil {
@@ -34,7 +34,7 @@ func NewConfig(filepath string) (Config, error) {
 	return c, nil
 }
 
-//implementation of method Check
+//Check verifies the content of Config to be in accordance with what's expected
 func (c Config) Check() error {
 	if c.TeamsLocation == "" {
 		return errors.New("undefined TeamsLocation")
