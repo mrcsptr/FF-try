@@ -1,1 +1,6 @@
-hello, world
+{
+    "TeamsLocation": "quelque part",
+    "DudesLocation": "autre part",
+    "ATeam": "Team A",
+    "BTeam": "Team B"
+}

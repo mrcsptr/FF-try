@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 )
 
@@ -13,11 +12,11 @@ func main() {
 	flag.StringVar(&configPath, "c", "config.json", "configuration filepath")
 
 	flag.Parse()
-
-	b, err := ioutil.ReadFile(configPath)
+	// loading configuration
+	config, err := NewConfig(configPath)
 	if err != nil {
 		log.Fatalln("unable to load configuration:", err)
 	}
 
-	fmt.Println(string(b))
+	fmt.Println(config)
 }
