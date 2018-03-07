@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 )
 
-// Config is a type hosting the data coming from config.json
+// Config is a type hosting the data coming from source.
 type Config struct {
 	TeamsLocation string
 	DudesLocation string
@@ -14,7 +14,7 @@ type Config struct {
 	BTeam         string
 }
 
-// NewConfig gets the information from config.json to get the data to fight
+// NewConfig gets the information from a json file.
 func NewConfig(filepath string) (Config, error) {
 	raw, err := ioutil.ReadFile(filepath)
 	if err != nil {
@@ -34,7 +34,7 @@ func NewConfig(filepath string) (Config, error) {
 	return c, nil
 }
 
-//Check verifies the content of Config to be in accordance with what's expected
+// Check returns an error when at least one mandatory key is undefined.
 func (c Config) Check() error {
 	if c.TeamsLocation == "" {
 		return errors.New("undefined TeamsLocation")
@@ -53,7 +53,6 @@ func (c Config) Check() error {
 
 // String implements the fmt.Stringer interface.
 // It returns the json representation of the config.
-
 func (c Config) String() string {
 	raw, _ := json.MarshalIndent(c, "", "    ")
 	return string(raw)
