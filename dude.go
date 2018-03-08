@@ -1,45 +1,65 @@
 package main
 
 import (
-
+	"io"
 )
-// Dude a type containing the name of the dude and his collection of results
-type Dude struct {
- Name string
- Results []DudeResult
+
+func AllDudes(location string) ([]riley.Dude, error) {
+	// ... load dudes.
+	raw, err := io.Reader(location)
+	if err != nil {
+		return []riley.Dude{}, err
+	}
 }
 
-// DudeResult contains one result, defining the position occupied then by the player, and the score obtained.
-type DudeResult struct{
-        Position string
-        Score int
+// Dude a type holding its characteristics.
+type Dude struct {
+	Name    string
+	Results []DudeResult
+}
+
+// DudeResult represents one result, with the position occupied then by the player, and the score obtained.
+type DudeResult struct {
+	Position string
+	Score    int
 }
 
 // Definition of the values for a win (V), tie (T), and a loss (L) (unused for now).
-const(
-    W = 3
-    T = 2
-    L = 1
+const (
+	W = 3
+	T = 2
+	L = 1
 )
-// Sum produces the current grades for the player, depending on the position that will be occupied: Attack (A), Middle (M), and Defense (D).
-func (du Dude) Sum() (int, int, int){
-    var a int
-    var m int
-    var d int
-    for _, s := range du.Results {
-        switch s.Position {
-            case "A" :
-                a+= s.Score
-            case "M" :
-                m+= s.Score
-            case "D" :
-                d+= s.Score
-        }
-    }
-    return a, m, d
+
+func (d Dude) ScoreA() int {
+	A := d.Score("A")
+	return A
 }
 
+func (d Dude) ScoreM() int {
+	M := d.Score("M")
+	return M
+}
 
+func (d Dude) ScoreA() int {
+	D := d.Score("D")
+	return D
+}
 
+// Score builds grade according to the position.
+func (d Dude) Score(p string) int {
+	var v int
+	for _, s := range d.Results {
 
-    
+		if s.Position == p {
+			v += s.Score
+		}
+	}
+	return v
+}
+
+// String implements the fmt.Stringer interface. It displays the name of the dude, it's current grades, and the number of fights he did.
+func (d Dude) String() string {
+	raw, _ := json.MarshallIndent(d, "", "    ")
+	return string(raw)
+}
