@@ -126,9 +126,46 @@ Finaly, print all dudes on the terminal after loading them in memory.
 
 _Note: because you have internal dependancies, you need to use the riley package within your source code. The riley package is the name of the `domain` package. Because the principal repository is `moxar/riley`, you need to rename it this way *on your computer*. Otherwise, the imports won't work._
 
+_Note: put some dude files in a `$PROJECT/samples/dudes` repository._
+
 ### Libs
 - fmt
 - strings
 - io
 - os
 - moxar/riley
+
+## 5. Define the Team domain type
+
+A team is composed of several dudes.
+Declare a team type at the domain (projet's root) level, with the proper attributes.
+A team is composed of a collection of dudes.
+
+Once the team type is declared, you need to instanciate it with its file. The configuration gives the location of the team's directory.
+Just as the dudes, each team must be parsed and loaded in memory.
+
+The team type must implement:
+- methods to calculate the sum of score of it's dudes, for each position.
+- methods to calculate the result of a given position against another team.
+- a method to determine, when opposing another team, the score: VTD.
+
+Finaly, print all teams on the terminal after loading them in memory.
+
+_Note: put some team files in a `$PROJECT/samples/teams` repository._
+
+## 6. Putting things together...
+
+Using te configuration, load the two opposing teams and their dudes, oppose them and define the winning team.
+Add the result to the dudes of each team for the next encounter.
+
+## 7. SQL
+
+TODO
+
+## 8. HTTP
+
+TODO
+
+## 9. Unit tests
+
+TODO
