@@ -1,16 +1,6 @@
-package main
+package riley
 
-import (
-	"io"
-)
-
-func AllDudes(location string) ([]riley.Dude, error) {
-	// ... load dudes.
-	raw, err := io.Reader(location)
-	if err != nil {
-		return []riley.Dude{}, err
-	}
-}
+import ()
 
 // Dude a type holding its characteristics.
 type Dude struct {
@@ -31,23 +21,20 @@ const (
 	L = 1
 )
 
-func (d Dude) ScoreA() int {
-	A := d.Score("A")
-	return A
+func (d Dude) A() int {
+	return d.score("A")
 }
 
-func (d Dude) ScoreM() int {
-	M := d.Score("M")
-	return M
+func (d Dude) M() int {
+	return d.score("M")
 }
 
-func (d Dude) ScoreA() int {
-	D := d.Score("D")
-	return D
+func (d Dude) D() int {
+	return d.score("D")
 }
 
-// Score builds grade according to the position.
-func (d Dude) Score(p string) int {
+// score builds grade according to the position.
+func (d Dude) score(p string) int {
 	var v int
 	for _, s := range d.Results {
 
@@ -56,10 +43,4 @@ func (d Dude) Score(p string) int {
 		}
 	}
 	return v
-}
-
-// String implements the fmt.Stringer interface. It displays the name of the dude, it's current grades, and the number of fights he did.
-func (d Dude) String() string {
-	raw, _ := json.MarshallIndent(d, "", "    ")
-	return string(raw)
 }
