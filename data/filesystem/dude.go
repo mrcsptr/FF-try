@@ -12,11 +12,11 @@ func AllDudes(location string) ([]riley.Dude, error) {
 	// ... load dudes.
 	files, err := ioutil.ReadDir(location)
 	if err != nil {
-		return []riley.Dude{}, err
+		return nil , err
 	}
 
 	for _, file := range files {
-		f, err := os.Open(file.Name)
+		f, err := os.Open(file.Name())
 		if err != nil {
 			return []riley.Dude{}, err
 		}
@@ -24,3 +24,4 @@ func AllDudes(location string) ([]riley.Dude, error) {
 
 }
 
+//func GetDude(location string)(riley.Dude, error)
