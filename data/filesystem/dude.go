@@ -14,14 +14,19 @@ func AllDudes(location string) ([]riley.Dude, error) {
 	if err != nil {
 		return nil , err
 	}
-
+var d []Dude
 	for _, file := range files {
-		f, err := os.Open(file.Name())
-		if err != nil {
-			return []riley.Dude{}, err
-		}
+        g :=GetDude(file.Name())
+        d = append(d,g)
 	}
-
 }
 
-//func GetDude(location string)(riley.Dude, error)
+func GetDude(location string)(riley.Dude, error){
+    var d Dude
+    d.Name = location
+    results, err := os.Open(location)
+    if err!= nil {
+        return  results, err
+    }
+    return d, nil
+}
