@@ -6,20 +6,22 @@ type Dude struct {
 	Results []DudeResult
 }
 
-// calculating the grades
+// A returns the grade of the dude for the position A.
 func (d Dude) A() int {
 	return d.score("A")
 }
 
+// see A.
 func (d Dude) M() int {
 	return d.score("M")
 }
 
+// see A.
 func (d Dude) D() int {
 	return d.score("D")
 }
 
-// score builds grade according to the position.
+// score builds score according to the selected position by summing all occurrences of grades related to said position.
 func (d Dude) score(p string) int {
 	var v int
 	for _, s := range d.Results {
