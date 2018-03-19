@@ -3,12 +3,11 @@ package filesystem
 import (
 	"bufio"
 	"fmt"
+	"github.com/moxar/riley"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/moxar/riley"
 )
 
 // AllDudes gets the dudes and put them in the appropriate structure.
@@ -61,15 +60,26 @@ func GetDude(location string) (riley.Dude, error) {
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
 func parseResult(content string) (riley.DudeResult, error) {
 
-	p, err := parsePosition(content)
-	if err != nil {
-		return riley.DudeResult{}, err
+	f := strings.Fields(content)
+	if strings.HasPrefix(f[0], "#") {
+		next
 	}
-	score, err := riley.ParseScore(content[len(content)-1:])
-	if err != nil {
-		return riley.DudeResult{}, err
+	if len(f[0]) > 1 {
+		return riley.DudeResult{}, fmt.Errorf("'%s' is an invalid input for position", f[0])
+	} else {
+		p, err := parsePosition(f[0])
+		if err != nil {
+			return riley.DudeResult{}, err
+		}
 	}
-
+	if strings.HasPrefix(f[1], "#") {
+		return riley.DudeResult{}, fmt.Errorf("'%s' is an invalid input for score", f[1])
+	} else {
+		score, err := riley.ParseScore(f[1])
+		if err != nil {
+			return riley.DudeResult{}, err
+		}
+	}
 	var r riley.DudeResult
 	r.Score = score
 	r.Position = p
@@ -78,11 +88,11 @@ func parseResult(content string) (riley.DudeResult, error) {
 
 func parsePosition(content string) (string, error) {
 	switch {
-	case strings.HasPrefix(content, "a"):
+	case strings.EqualFold(content, "a"):
 		return "A", nil
-	case strings.HasPrefix(content, "m"):
+	case strings.EqualFold(content, "m"):
 		return "M", nil
-	case strings.HasPrefix(content, "d"):
+	case strings.EqualFold(content, "d"):
 		return "D", nil
 	default:
 		return "", fmt.Errorf("invalid position '%s'", content)
