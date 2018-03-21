@@ -2,6 +2,7 @@ package filesystem
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"github.com/moxar/riley"
 	"io/ioutil"
@@ -43,7 +44,12 @@ func GetDude(location string) (riley.Dude, error) {
 	var results []riley.DudeResult
 	for scanner.Scan() {
 		r, err := parseResult(scanner.Text())
-		if err != nil {
+		switch err {
+		case EmptyLineErr:
+			next
+		case CommentaryErr:
+			next
+		default:
 			return riley.Dude{}, err
 		}
 		results = append(results, r)
@@ -59,10 +65,14 @@ func GetDude(location string) (riley.Dude, error) {
 
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
 func parseResult(content string) (riley.DudeResult, error) {
-
+	var EmptyLineErr = errors.New("EmptyLineErr")
+	var CommentaryErr = errors.New("CommentaryErr")
 	f := strings.Fields(content)
+	if f[0] == "" {
+		return riley.DudeResult{}, EmptyLineErr
+	}
 	if strings.HasPrefix(f[0], "#") {
-		next
+		return riley.DudeResult{}, CommentaryErr
 	}
 	if len(f[0]) > 1 {
 		return riley.DudeResult{}, fmt.Errorf("'%s' is an invalid input for position", f[0])
