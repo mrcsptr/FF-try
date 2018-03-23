@@ -45,10 +45,9 @@ func GetDude(location string) (riley.Dude, error) {
 	var results []riley.DudeResult
 	for scanner.Scan() {
 		r, err := parseResult(scanner.Text())
-		switch err {
-		case EmptyLineErr:
+		if err == EmptyLineErr {
 			continue
-		default:
+        } else {
 			return riley.Dude{}, err
 		}
 		results = append(results, r)
@@ -61,26 +60,31 @@ func GetDude(location string) (riley.Dude, error) {
 	d.Results = results
 	return d, err
 }
-// EmptyLineErr allows to make a difference between error due to empty line or comments and errors due to bad fillings.
+// EmptyLineErr is returned when the line to parse is empty or only contains a comment
 var EmptyLineErr = errors.New("EmptyLineErr")
 
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
 func parseResult(content string) (riley.DudeResult, error) {
 
-	entry := strings.Fields(content)
-	if len(entry) == 0 {
-		return riley.DudeResult{}, EmptyLineErr
+	entries := strings.Fields(content)
+	switch len(entries) {
+        case 0:
+            return riley.DudeResult{}, EmptyLineErr
+        case 2:
+            continue
+        default:
+            return riley.DudeResult{}, fmt.Errorf("invalid entries")
 	}
-	if entry[0][0] == '#' {
+	if entries[0][0] == '#' {
 		return riley.DudeResult{}, EmptyLineErr
 	}
 
-	p, err := parsePosition(entry[0])
+	p, err := parsePosition(entries[0])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
 
-	score, err := riley.ParseScore(entry[1])
+	score, err := riley.ParseScore(entries[1])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
