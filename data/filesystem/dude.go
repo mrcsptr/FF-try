@@ -2,13 +2,13 @@ package filesystem
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
+	"github.com/moxar/riley"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/moxar/riley"
 )
 
 // AllDudes gets the dudes and put them in the appropriate structure.
@@ -19,10 +19,11 @@ func AllDudes(location string) ([]riley.Dude, error) {
 		return nil, err
 	}
 	var dudes []riley.Dude
+	// parsing all files in directory
 	for _, file := range files {
 		d, err := GetDude(file.Name())
 		if err != nil {
-			return []riley.Dude{}, err
+			return nil, err
 		}
 		dudes = append(dudes, d)
 	}
@@ -45,7 +46,10 @@ func GetDude(location string) (riley.Dude, error) {
 	for scanner.Scan() {
 		r, err := parseResult(scanner.Text())
 		if err != nil {
-			return riley.Dude{}, err
+			if err != ErrEmptyLine {
+				return riley.Dude{}, err
+			}
+			continue
 		}
 		results = append(results, r)
 	}
@@ -58,14 +62,29 @@ func GetDude(location string) (riley.Dude, error) {
 	return d, err
 }
 
+// NoEntryLineErr is returned when the line to parse is empty or only contains a comment
+var ErrEmptyLine = errors.New("line does not contain entries")
+
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
 func parseResult(content string) (riley.DudeResult, error) {
 
-	p, err := parsePosition(content)
+	entries := strings.Fields(content)
+	if len(entries) < 2 {
+		if len(entries) == 0 {
+			return riley.DudeResult{}, ErrEmptyLine
+		}
+		return riley.DudeResult{}, fmt.Errorf("invalid entry: %s", content)
+	}
+	if entries[0][0] == '#' {
+		return riley.DudeResult{}, ErrEmptyLine
+	}
+
+	p, err := parsePosition(entries[0])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
-	score, err := riley.ParseScore(content[len(content)-1:])
+
+	score, err := riley.ParseScore(entries[1])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
@@ -76,13 +95,14 @@ func parseResult(content string) (riley.DudeResult, error) {
 	return r, nil
 }
 
+// parsePosition checks the position occupied by the dude for the selected entry, and returns an error if character is missing or not what was expected
 func parsePosition(content string) (string, error) {
 	switch {
-	case strings.HasPrefix(content, "a"):
+	case strings.EqualFold(content, "a"):
 		return "A", nil
-	case strings.HasPrefix(content, "m"):
+	case strings.EqualFold(content, "m"):
 		return "M", nil
-	case strings.HasPrefix(content, "d"):
+	case strings.EqualFold(content, "d"):
 		return "D", nil
 	default:
 		return "", fmt.Errorf("invalid position '%s'", content)
