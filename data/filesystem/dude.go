@@ -2,13 +2,12 @@ package filesystem
 
 import (
 	"bufio"
-	"errors"
-	"fmt"
-	"github.com/moxar/riley"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/moxar/riley"
 )
 
 // AllDudes gets the dudes and put them in the appropriate structure.
@@ -62,29 +61,26 @@ func GetDude(location string) (riley.Dude, error) {
 	return d, err
 }
 
-// NoEntryLineErr is returned when the line to parse is empty or only contains a comment
-var ErrEmptyLine = errors.New("line does not contain entries")
-
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
 func parseResult(content string) (riley.DudeResult, error) {
 
-	entries := strings.Fields(content)
-	if len(entries) < 2 {
-		if len(entries) == 0 {
+	chunks := strings.Fields(content)
+	if len(chunks) < 2 {
+		if len(chunks) == 0 {
 			return riley.DudeResult{}, ErrEmptyLine
 		}
-		return riley.DudeResult{}, fmt.Errorf("invalid entry: %s", content)
+		return riley.DudeResult{}, newInvalidLineError(content)
 	}
-	if entries[0][0] == '#' {
+	if chunks[0][0] == '#' {
 		return riley.DudeResult{}, ErrEmptyLine
 	}
 
-	p, err := parsePosition(entries[0])
+	p, err := parsePosition(chunks[0])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
 
-	score, err := riley.ParseScore(entries[1])
+	score, err := riley.ParseScore(chunks[1])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
@@ -95,7 +91,8 @@ func parseResult(content string) (riley.DudeResult, error) {
 	return r, nil
 }
 
-// parsePosition checks the position occupied by the dude for the selected entry, and returns an error if character is missing or not what was expected
+// parsePosition checks the position occupied by the dude for the selected entry,
+// and returns an error if character is missing or not what was expected.
 func parsePosition(content string) (string, error) {
 	switch {
 	case strings.EqualFold(content, "a"):
@@ -105,6 +102,6 @@ func parsePosition(content string) (string, error) {
 	case strings.EqualFold(content, "d"):
 		return "D", nil
 	default:
-		return "", fmt.Errorf("invalid position '%s'", content)
+		return "", newInvalidPositionError(content)
 	}
 }
