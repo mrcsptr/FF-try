@@ -46,7 +46,7 @@ func GetDude(location string) (riley.Dude, error) {
 	for scanner.Scan() {
 		r, err := parseResult(scanner.Text())
 		if err != nil {
-			if err != NoEntryLineErr {
+			if err != ErrEmptyLine {
 				return riley.Dude{}, err
 			}
 			continue
@@ -63,7 +63,7 @@ func GetDude(location string) (riley.Dude, error) {
 }
 
 // NoEntryLineErr is returned when the line to parse is empty or only contains a comment
-var NoEntryLineErr = errors.New("NoEntryLineErr")
+var ErrEmptyLine = errors.New("line does not contain entries")
 
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
 func parseResult(content string) (riley.DudeResult, error) {
@@ -71,12 +71,12 @@ func parseResult(content string) (riley.DudeResult, error) {
 	entries := strings.Fields(content)
 	if len(entries) < 2 {
 		if len(entries) == 0 {
-			return riley.DudeResult{}, NoEntryLineErr
+			return riley.DudeResult{}, ErrEmptyLine
 		}
-		return riley.DudeResult{}, fmt.Errorf("invalid entries: %s", content)
+		return riley.DudeResult{}, fmt.Errorf("invalid entry: %s", content)
 	}
 	if entries[0][0] == '#' {
-		return riley.DudeResult{}, NoEntryLineErr
+		return riley.DudeResult{}, ErrEmptyLine
 	}
 
 	p, err := parsePosition(entries[0])
