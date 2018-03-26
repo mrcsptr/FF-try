@@ -1,6 +1,6 @@
 {
-    "TeamsLocation": "quelque part",
-    "DudesLocation": "autre part",
+    "TeamsLocation": "samples/teams",
+    "DudesLocation": "samples/dudes",
     "ATeam": "Team A",
     "BTeam": "Team B"
 }

@@ -45,9 +45,7 @@ func GetDude(location string) (riley.Dude, error) {
 	var results []riley.DudeResult
 	for scanner.Scan() {
 		r, err := parseResult(scanner.Text())
-		if err == EmptyLineErr {
-			continue
-        } else {
+		if err != EmptyLineErr {
 			return riley.Dude{}, err
 		}
 		results = append(results, r)
@@ -60,6 +58,7 @@ func GetDude(location string) (riley.Dude, error) {
 	d.Results = results
 	return d, err
 }
+
 // EmptyLineErr is returned when the line to parse is empty or only contains a comment
 var EmptyLineErr = errors.New("EmptyLineErr")
 
@@ -67,13 +66,12 @@ var EmptyLineErr = errors.New("EmptyLineErr")
 func parseResult(content string) (riley.DudeResult, error) {
 
 	entries := strings.Fields(content)
-	switch len(entries) {
-        case 0:
-            return riley.DudeResult{}, EmptyLineErr
-        case 2:
-            continue
-        default:
-            return riley.DudeResult{}, fmt.Errorf("invalid entries")
+	if len(entries) < 2 {
+		if len(entries) == 0 {
+			return riley.DudeResult{}, EmptyLineErr
+		} else {
+			return riley.DudeResult{}, fmt.Errorf("invalid entries")
+		}
 	}
 	if entries[0][0] == '#' {
 		return riley.DudeResult{}, EmptyLineErr
