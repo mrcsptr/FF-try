@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
+
+	"github.com/moxar/riley/data/filesystem"
 )
 
 func main() {
@@ -18,5 +20,10 @@ func main() {
 		log.Fatalln("unable to load configuration:", err)
 	}
 
-	fmt.Println(config)
+	dudes, err := filesystem.AllDudes(config.DudesLocation)
+	if err != nil {
+		log.Fatalln("unable to parse dudes:", err)
+	}
+
+	fmt.Println(dudes)
 }

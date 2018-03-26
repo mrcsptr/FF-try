@@ -20,7 +20,7 @@ func AllDudes(location string) ([]riley.Dude, error) {
 	var dudes []riley.Dude
 	// parsing all files in directory
 	for _, file := range files {
-		d, err := GetDude(file.Name())
+		d, err := GetDude(location + "/" + file.Name())
 		if err != nil {
 			return nil, err
 		}
@@ -30,8 +30,8 @@ func AllDudes(location string) ([]riley.Dude, error) {
 }
 
 // GetDude parses the content of a dude file, and returns an error if smething went wrong along the way.
-func GetDude(location string) (riley.Dude, error) {
-	file, err := os.Open(location)
+func GetDude(path string) (riley.Dude, error) {
+	file, err := os.Open(path)
 	if err != nil {
 		return riley.Dude{}, err
 	}
@@ -56,7 +56,7 @@ func GetDude(location string) (riley.Dude, error) {
 		return riley.Dude{}, err
 	}
 	var d riley.Dude
-	d.Name = filepath.Clean(location)
+	d.Name = filepath.Clean(strings.TrimSuffix(path, filepath.Ext(path)))
 	d.Results = results
 	return d, err
 }
