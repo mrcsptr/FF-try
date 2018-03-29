@@ -1,5 +1,7 @@
 package riley
 
+import "encoding/json"
+
 // Dude a type holding its characteristics.
 type Dude struct {
 	Name    string
@@ -31,4 +33,10 @@ func (d Dude) score(p string) int {
 		}
 	}
 	return v
+}
+
+// String returns the json representation of a dude.
+func (d Dude) String() string {
+	raw, _ := json.Marshal(d)
+	return string(raw)
 }
