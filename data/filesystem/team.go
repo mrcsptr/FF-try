@@ -41,28 +41,28 @@ func GetTeam(path string) (riley.Team, error) {
 
 	scanner := bufio.NewScanner(file)
 
-	var comp []riley.Teammate
+	var team []riley.Teammate
 	for scanner.Scan() {
-		c, err := parseComp(scanner.Text())
+		c, err := parseTeam(scanner.Text())
 		if err != nil {
 			if err != ErrEmptyLine {
 				return riley.Team{}, err
 			}
 			continue
 		}
-		comp = append(comp, c)
+		team = append(team, c)
 	}
 	if err := scanner.Err(); err != nil {
 		return riley.Team{}, err
 	}
 	var t riley.Team
 	t.Name = filepath.Clean(strings.TrimSuffix(path, filepath.Ext(path)))
-	t.Comp = comp
+	t.Team = team
 	return t, err
 }
 
 // parseResult exploits the data contained in the dude files, and returns an error if a dude has been badly filled.
-func parseComp(content string) (riley.Teammate, error) {
+func parseTeam(content string) (riley.Teammate, error) {
 
 	chunks := strings.Fields(content)
 	if len(chunks) < 2 {
@@ -75,43 +75,13 @@ func parseComp(content string) (riley.Teammate, error) {
 		return riley.Teammate{}, ErrEmptyLine
 	}
 
-
-
-	dude, err := riley.ParseDude(chunks[0])
-	if err != nil {
-		return riley.Teammate{}, err
-	}
-	
-		p, err := parsePosition(chunks[1])
+	p, err := riley.ParsePosition(chunks[1])
 	if err != nil {
 		return riley.Teammate{}, err
 	}
 
 	var t riley.Teammate
-	t.Dude = dude
+	t.Name = chunks[0]
 	t.Position = p
 	return t, nil
-}
-
-// parseDude checks the dude in the and search for the data  // about him in AllDudes and returns an error if character is // missing or not what was expected.
-func parseDude(content string) (riley.Dude, error) {
-	}
-}
-
-
-
-
-// parsePosition checks the position occupied by the dude for the selected entry,
-// and returns an error if character is missing or not what was expected.
-func parsePosition(content string) (string, error) {
-	switch {
-	case strings.EqualFold(content, "a"):
-		return "A", nil
-	case strings.EqualFold(content, "m"):
-		return "M", nil
-	case strings.EqualFold(content, "d"):
-		return "D", nil
-	default:
-		return "", newInvalidPositionError(content)
-	}
 }

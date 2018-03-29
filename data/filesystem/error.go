@@ -20,17 +20,3 @@ func (e *InvalidLineError) Error() string {
 	return "invalid line: " + e.line
 }
 
-// InvalidPositionError is the error returned when a position is invalid.
-type InvalidPositionError struct {
-	position string
-}
-
-// newInvalidPositionError returns an InvalidPositionError.
-func newInvalidPositionError(position string) *InvalidPositionError {
-	return &InvalidPositionError{position: position}
-}
-
-// Error implements the error interface.
-func (e *InvalidPositionError) Error() string {
-	return "invalid position: " + e.position
-}
