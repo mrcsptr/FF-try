@@ -1,7 +1,7 @@
 package riley
 
 import (
-    "fmt"
+	"fmt"
 	"strings"
 )
 

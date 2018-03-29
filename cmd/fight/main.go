@@ -25,5 +25,11 @@ func main() {
 		log.Fatalln("unable to parse dudes:", err)
 	}
 
-	fmt.Println(dudes)
+	teams, err := filesystem.AllTeams(config.TeamsLocation)
+	if err != nil {
+		log.Fatalln("unable to parse teams:", err)
+	}
+
+	fmt.Println(teams)
+    fmt.Println(dudes)
 }
