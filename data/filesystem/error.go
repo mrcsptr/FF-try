@@ -19,4 +19,3 @@ func newInvalidLineError(line string) *InvalidLineError {
 func (e *InvalidLineError) Error() string {
 	return "invalid line: " + e.line
 }
-

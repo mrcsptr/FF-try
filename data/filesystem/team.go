@@ -75,7 +75,7 @@ func parseTeam(content string) (riley.Teammate, error) {
 		return riley.Teammate{}, ErrEmptyLine
 	}
 
-	p, err := riley.ParsePosition(chunks[1])
+	p, err := parsePosition(chunks[1])
 	if err != nil {
 		return riley.Teammate{}, err
 	}

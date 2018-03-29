@@ -75,7 +75,7 @@ func parseResult(content string) (riley.DudeResult, error) {
 		return riley.DudeResult{}, ErrEmptyLine
 	}
 
-	p, err := riley.ParsePosition(chunks[0])
+	p, err := parsePosition(chunks[0])
 	if err != nil {
 		return riley.DudeResult{}, err
 	}
@@ -90,5 +90,3 @@ func parseResult(content string) (riley.DudeResult, error) {
 	r.Position = p
 	return r, nil
 }
-
-
