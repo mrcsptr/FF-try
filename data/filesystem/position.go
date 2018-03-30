@@ -1,7 +1,6 @@
 package filesystem
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -16,6 +15,6 @@ func parsePosition(content string) (string, error) {
 	case strings.EqualFold(content, "d"):
 		return "D", nil
 	default:
-		return "", fmt.Errorf("invalid position '%s'", content)
+		return "", newInvalidPositionError(content)
 	}
 }
