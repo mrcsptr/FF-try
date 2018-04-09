@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/moxar/riley"
 	"github.com/moxar/riley/data/filesystem"
+    
 )
 
 func main() {
@@ -20,16 +22,24 @@ func main() {
 		log.Fatalln("unable to load configuration:", err)
 	}
 
-	dudes, err := filesystem.AllDudes(config.DudesLocation)
-	if err != nil {
-		log.Fatalln("unable to parse dudes:", err)
-	}
-
 	teams, err := filesystem.AllTeams(config.TeamsLocation)
 	if err != nil {
 		log.Fatalln("unable to parse teams:", err)
 	}
-
-	fmt.Println(teams)
-    fmt.Println(dudes)
+	
+	for _, t := range teams {
+        grades := riley.NewGrades()
+        for _, m := range t.Teammates{
+            dude, err := filesystem.GetDude(config.DudesLocation + "/" + m.Name + ".txt")
+            if err != nil {
+                log.Fatalln("unable to parse dude:", err)
+            }
+            
+            grades.AddScore(m.Position, dude) 
+        }
+        fmt.Println("team:", t.Name)
+        fmt.Println("players:", t.Teammates)
+        fmt.Println("grade:", grades)
+        fmt.Println("")
+    }
 }
