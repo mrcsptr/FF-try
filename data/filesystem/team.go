@@ -56,7 +56,7 @@ func GetTeam(path string) (riley.Team, error) {
 		return riley.Team{}, err
 	}
 	var t riley.Team
-	t.Name = filepath.Clean(strings.TrimSuffix(path, filepath.Ext(path)))
+	t.Name = strings.TrimSuffix(filepath.Clean(path), filepath.Ext(path))
 	t.Teammates = team
 	return t, err
 }

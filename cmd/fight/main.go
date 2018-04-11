@@ -37,9 +37,10 @@ func main() {
             
             grades.AddScore(m.Position, dude) 
         }
-        fmt.Println("team:", t.Name)
-        fmt.Println("players:", t.Teammates)
-        fmt.Println("grade:", grades)
-        fmt.Println("")
+        grades.Combat (config.ATeam, config.BTeam)
+//        fmt.Println("team:", t.Name)
+//        fmt.Println("players:", t.Teammates)
+//        fmt.Println("grade:", grades)
+//        fmt.Println("")
     }
 }
